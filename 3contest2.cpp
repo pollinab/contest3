@@ -1,3 +1,14 @@
+/*Дано число N < 106 и последовательность пар целых чисел из [-231, 231].
+Построить декартово дерево из N узлов, характеризующихся парами чисел (Xi, Yi). 
+Каждая пара чисел (Xi, Yi) определяет ключ Xi и приоритет Yi в декартовом дереве. 
+Добавление узла в декартово дерево выполняйте второй версией алгоритма, рассказанного на лекции: 
+При добавлении узла (x, y) выполняйте спуск по ключу до узла P с меньшим приоритетом. Затем разбейте найденное поддерево по ключу x так,
+чтобы в первом поддереве все ключи меньше x, а во втором больше или равны x. 
+Получившиеся два дерева сделайте дочерними для нового узла (x, y). Новый узел вставьте на место узла P. 
+Построить также наивное дерево поиска по ключам Xi. Равные ключи добавляйте в правое поддерево. 
+Вычислить количество узлов в самом широком слое декартового дерева и количество узлов в самом широком слое наивного дерева поиска.
+Вывести их разницу. Разница может быть отрицательна.*/
+
 #include<iostream>
 #include<queue>
 
@@ -23,7 +34,7 @@ struct CNode
     }
 };
 
-void Split(CNode* currentNode, int Key, CNode*& left, CNode*& right)
+void Split(CNode* currentNode, int Key, CNode*& left, CNode*& right) //разрезание дерева по ключу
 {
     if (currentNode == nullptr)
     {
@@ -42,7 +53,7 @@ void Split(CNode* currentNode, int Key, CNode*& left, CNode*& right)
     }
 }
 
-CNode* Insert2(CNode* root, int x, int y)
+CNode* Insert2(CNode* root, int x, int y) //добавление вершины в декартово дерево
 {
     CNode* node = new CNode(x, y);
     while (root -> priority >= node -> priority)
@@ -73,7 +84,7 @@ CNode* Insert2(CNode* root, int x, int y)
     return node;
 }
 
-void Insert1(CNode* root, int value)
+void Insert1(CNode* root, int value) //добавление вершины в наивное дерево
 {
     bool stop = false;
     while(!stop)
@@ -101,7 +112,7 @@ void Insert1(CNode* root, int value)
     }
 }
 
-int MaxWidth(CNode* root)
+int MaxWidth(CNode* root) //максимальная ширина дерева
 {
     std::queue <CNode> Queue;
     Queue.push(*root);
@@ -154,7 +165,7 @@ int main()
     for (int i = 1; i < N; ++i)
     {
         std::cin >> x >> y;
-        Insert1(root1, x);
+        Insert1(root1, x);        //построение двух деревьев: наивного(приоритет равен 0) и декартова
         Insert2(root2, x, y);
     }
     std::cout << MaxWidth(root2) - MaxWidth(root1);
