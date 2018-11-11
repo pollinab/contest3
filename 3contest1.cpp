@@ -1,3 +1,8 @@
+/*Дано число N < 106 и последовательность целых чисел из [-231..231] длиной N.
+Требуется построить бинарное дерево, заданное наивным порядком вставки. 
+Т.е., при добавлении очередного числа K в дерево с корнем root, если root→Key ≤ K, то узел K добавляется в правое поддерево root; 
+иначе в левое поддерево root. Выведите элементы в порядке pre-order (сверху вниз). Рекурсия запрещена.*/
+
 #include<iostream>
 #include<stack>
 
@@ -42,6 +47,16 @@ void Insert(CBinaryNode* root, int value)
     }
 }
 
+void Destroy(CBinaryNode* root)
+{
+    if (root != nullptr)
+    {
+        Destroy(root -> right);
+        Destroy(root -> left);
+        delete root;
+    }
+}
+
 int main()
 {
     int N, elem;
@@ -65,6 +80,6 @@ int main()
         if (node.left != nullptr)
             Stack.push(*node.left);
     }
-    delete root;
+    Destroy(root);
     return 0;
 }
