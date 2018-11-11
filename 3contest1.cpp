@@ -47,6 +47,16 @@ void Insert(CBinaryNode* root, int value)
     }
 }
 
+void Destroy(CBinaryNode* root)
+{
+    if (root != nullptr)
+    {
+        Destroy(root -> right);
+        Destroy(root -> left);
+        delete root;
+    }
+}
+
 int main()
 {
     int N, elem;
@@ -70,6 +80,6 @@ int main()
         if (node.left != nullptr)
             Stack.push(*node.left);
     }
-    delete root;
+    Destroy(root);
     return 0;
 }
