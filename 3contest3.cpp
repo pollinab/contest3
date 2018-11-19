@@ -1,3 +1,11 @@
+/*В одной военной части решили построить в одну шеренгу по росту. Т.к. часть была далеко не образцовая, 
+то солдаты часто приходили не вовремя, а то их и вовсе приходилось выгонять из шеренги за плохо начищенные сапоги. 
+Однако солдаты в процессе прихода и ухода должны были всегда быть выстроены по росту – сначала самые высокие, 
+а в конце – самые низкие. За расстановку солдат отвечал прапорщик, который заметил интересную особенность – все солдаты в части разного роста. 
+Ваша задача состоит в том, чтобы помочь прапорщику правильно расставлять солдат, а именно для каждого приходящего солдата указывать, 
+перед каким солдатом в строе он должен становится. Требуемая скорость выполнения команды - O(log n).*/
+
+
 #include<iostream>
 #include<algorithm>
 #include<queue>
@@ -19,7 +27,7 @@ struct CNode
     }
 };
 
-int Height(CNode* node)
+int Height(CNode* node) //высота дерева с данным корнем
 {
     if (node == nullptr)
         return 0;
@@ -27,7 +35,7 @@ int Height(CNode* node)
         return node -> height;
 }
 
-int TreeSize(CNode* node)
+int TreeSize(CNode* node) //количество вершин в дереве с данным корнем
 {
     if (node == nullptr)
         return 0;
@@ -35,12 +43,12 @@ int TreeSize(CNode* node)
         return node -> treeSize;
 }
 
-int Diff(CNode* node)
+int Diff(CNode* node) //разница между высотами правого и левого поддеревьев
 {
     return Height(node -> right) - Height(node -> left);
 }
 
-CNode* LeftRotation(CNode* node)
+CNode* LeftRotation(CNode* node) // левый поворот
 {
     CNode* newRoot = node -> right;
     node -> right = newRoot -> left;
@@ -52,7 +60,7 @@ CNode* LeftRotation(CNode* node)
     return newRoot;
 }
 
-CNode* RightRotation(CNode* node)
+CNode* RightRotation(CNode* node) // правый поворот
 {
     CNode* newRoot = node -> left;
     node -> left = newRoot -> right;
@@ -64,7 +72,7 @@ CNode* RightRotation(CNode* node)
     return newRoot;
 }
 
-CNode* Balance(CNode* node)
+CNode* Balance(CNode* node) // балансировка
 {
     if (Diff(node) == 2)
     {
@@ -81,7 +89,7 @@ CNode* Balance(CNode* node)
     return node;
 }
 
-CNode* Insert(CNode* root, int value)
+CNode* Insert(CNode* root, int value) // вставка элемента
 {
     if (root == nullptr)
     {
@@ -96,12 +104,12 @@ CNode* Insert(CNode* root, int value)
     {
         root -> right = Insert(root -> right, value);
     }
-    (root -> treeSize)++;
+    (root -> treeSize)++;                                                  //обновляем высоту и размер дерева
     root -> height = std::max(Height(root -> right), Height(root -> left));
     return Balance(root);
 }
 
-CNode* DeleteMin(CNode* root)
+CNode* DeleteMin(CNode* root) //удаление минимального элемента
 {
     if (root -> left == nullptr)
     {
@@ -113,7 +121,7 @@ CNode* DeleteMin(CNode* root)
     return Balance(root);
 }
 
-CNode* Delete(CNode* root, int value)
+CNode* Delete(CNode* root, int value) //удаление вершины по ключу
 {
     if (root -> key == value)
     {
@@ -147,10 +155,10 @@ CNode* Delete(CNode* root, int value)
     return Balance(root);
 }
 
-int Number(CNode* root, int value)
+int Number(CNode* root, int value) //номер вершины с указанным ключом 
 {
     int n = 0;
-    while(root -> key != value)
+    while (root -> key != value)
     {
         if (root -> key > value)
         {
@@ -166,7 +174,7 @@ int Number(CNode* root, int value)
     return n;
 }
 
-CNode* KStat(CNode* root, int k)
+CNode* KStat(CNode* root, int k) //k-ый по порядку элемент
 {
     int n = TreeSize(root -> left);
     if (k == n)
